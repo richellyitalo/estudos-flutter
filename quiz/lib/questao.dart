@@ -6,6 +6,14 @@ class Questao extends StatelessWidget {
   Questao(this.texto);
   @override
   Widget build(BuildContext context) {
-    return Text(texto);
+    return Container(
+      width: double.infinity,
+      margin: EdgeInsets.all(20),
+      child: Text(
+        texto,
+        style: TextStyle(fontSize: 25),
+        textAlign: TextAlign.center,
+      ),
+    );
   }
 }
