@@ -10,15 +10,30 @@ class _QuizAppState extends State<QuizApp> {
   final List<Map<String, Object>> _perguntas = const [
     {
       'texto': 'Qual seu jogo favorito?',
-      'alternativas': ['God of war 2', 'Def Jam', 'CSGO', 'PES 2021']
+      'alternativas': [
+        {'texto': 'God of war 2', 'nota': 2},
+        {'texto': 'Def Jam', 'nota': 8},
+        {'texto': 'CSGO', 'nota': 1},
+        {'texto': 'Legacy of kain', 'nota': 10},
+      ]
     },
     {
       'texto': 'Qual seu time do coração?',
-      'alternativas': ['Vasco da gama', 'Flamengo', 'Grêmio', 'Chelsea']
+      'alternativas': [
+        {'texto': 'Vasco da gama', 'nota': 9},
+        {'texto': 'Flamengo', 'nota': 5},
+        {'texto': 'Grêmio', 'nota': 2},
+        {'texto': 'Chelsea', 'nota': 10},
+      ]
     },
     {
       'texto': 'Qual sua linguagem de programação favorita?',
-      'alternativas': ['PHP', 'Javascript', 'Python', 'Java']
+      'alternativas': [
+        {'texto': 'PHP', 'nota': 8},
+        {'texto': 'Javascript', 'nota': 7},
+        {'texto': 'Python', 'nota': 10},
+        {'texto': 'Java', 'nota': 1},
+      ]
     }
   ];
 
