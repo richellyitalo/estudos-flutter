@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class Resposta extends StatelessWidget {
   final String texto;
-  final Function quandoSelecionado;
+  final Function fnSelecionarResposta;
 
-  Resposta(this.texto, this.quandoSelecionado);
+  Resposta(this.texto, this.fnSelecionarResposta);
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class Resposta extends StatelessWidget {
       margin: EdgeInsets.only(bottom: 8),
       child: ElevatedButton(
         child: Text(texto),
-        onPressed: quandoSelecionado,
+        onPressed: fnSelecionarResposta,
       ),
     );
   }

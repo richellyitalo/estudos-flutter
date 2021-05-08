@@ -42,10 +42,6 @@ class _QuizAppState extends State<QuizApp> {
 
   @override
   Widget build(BuildContext context) {
-    // for (String alternativa in perguntas[_respostaSelecionada]['alternativas']) {
-    //   alternativasWidget.add(Resposta(alternativa, _responder));
-    // }
-
     return MaterialApp(
         home: Scaffold(
       appBar: AppBar(
