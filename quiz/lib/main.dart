@@ -75,7 +75,7 @@ class _QuizAppState extends State<QuizApp> {
               perguntaSelecionada: _perguntaSelecionada,
               fnResponder: _responder,
             )
-          : Resultado(),
+          : Resultado(_pontuacaoTotal),
       floatingActionButton: !temPerguntaSelecionada
           ? FloatingActionButton(
               child: Icon(Icons.arrow_back),
