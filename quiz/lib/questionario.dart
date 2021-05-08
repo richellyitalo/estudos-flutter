@@ -5,7 +5,7 @@ import 'package:quiz/resposta.dart';
 class Questionario extends StatelessWidget {
   final List<Map<String, Object>> perguntas;
   final int perguntaSelecionada;
-  final Function fnResponder;
+  final Function(int) fnResponder;
 
   Questionario({
     @required this.perguntas,
@@ -24,7 +24,10 @@ class Questionario extends StatelessWidget {
         : null;
 
     List<Widget> alternativasWidget = temPerguntaSelecionada
-        ? alternativas.map((opcao) => Resposta(opcao['texto'], fnResponder)).toList()
+        ? alternativas.map((opcao) {
+            return Resposta(
+                opcao['texto'], () => fnResponder(opcao['pontuacao']));
+          }).toList()
         : null;
 
     return Column(
