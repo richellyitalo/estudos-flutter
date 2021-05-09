@@ -9,7 +9,29 @@ main() => runApp(ExpensesApp());
 class ExpensesApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: HomeApp());
+    return MaterialApp(
+      home: HomeApp(),
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+        accentColor: Colors.amber,
+        textTheme: ThemeData.light().textTheme.copyWith(
+              headline6: TextStyle(
+                fontFamily: 'Montserrat',
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+        appBarTheme: AppBarTheme(
+          textTheme: ThemeData.light().textTheme.copyWith(
+                headline6: TextStyle(
+                  fontFamily: 'Montserrat',
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+        ),
+      ),
+    );
   }
 }
 
@@ -23,21 +45,23 @@ class _HomeAppState extends State<HomeApp> {
     return showModalBottomSheet(
         context: context,
         builder: (context) {
-          return SingleChildScrollView(child: TransactionForm(_addTransaction));
+          return SingleChildScrollView(
+            child: TransactionForm(_addTransaction),
+          );
         });
   }
 
   final List<Transaction> _transactions = [
-    Transaction(
-        id: 't1',
-        title: 'Compras mercado',
-        value: 450.55,
-        date: DateTime.now()),
-    Transaction(
-        id: 't2',
-        title: 'Mensalidade Internet',
-        value: 350.00,
-        date: DateTime.now()),
+    // Transaction(
+    //     id: 't1',
+    //     title: 'Compras mercado',
+    //     value: 450.55,
+    //     date: DateTime.now()),
+    // Transaction(
+    //     id: 't2',
+    //     title: 'Mensalidade Internet',
+    //     value: 350.00,
+    //     date: DateTime.now()),
   ];
 
   _addTransaction(String title, double value) {
@@ -51,6 +75,8 @@ class _HomeAppState extends State<HomeApp> {
     setState(() {
       _transactions.add(newTransaction);
     });
+
+    Navigator.of(context).pop();
   }
 
   @override
