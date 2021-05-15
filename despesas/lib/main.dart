@@ -62,7 +62,7 @@ class _HomeAppState extends State<HomeApp> {
       ),
     ),
     Transaction(
-        id: 't1',
+        id: 't33',
         title: 'Compras mercado',
         value: 450.55,
         date: DateTime.now().subtract(Duration(days: 4))),
@@ -101,6 +101,12 @@ class _HomeAppState extends State<HomeApp> {
     Navigator.of(context).pop();
   }
 
+  _removeTransaction(String id) {
+    setState(() {
+      _transactions.removeWhere((tr) => tr.id == id);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -118,7 +124,7 @@ class _HomeAppState extends State<HomeApp> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Chart(_recentTransactions),
-            TransactionList(_transactions),
+            TransactionList(_transactions, _removeTransaction),
           ],
         ),
       ),
