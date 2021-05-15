@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class TransactionForm extends StatefulWidget {
-  final void Function(String, double) onSubmit;
+  final void Function(String, double, DateTime) onSubmit;
 
   TransactionForm(this.onSubmit);
 
@@ -12,7 +13,8 @@ class TransactionForm extends StatefulWidget {
 class _TransactionFormState extends State<TransactionForm> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _valueController = TextEditingController();
-  final void Function(String, double) onSubmit;
+  final void Function(String, double, DateTime) onSubmit;
+  DateTime _selectedDate;
 
   _TransactionFormState(this.onSubmit);
 
@@ -27,7 +29,21 @@ class _TransactionFormState extends State<TransactionForm> {
     _titleController.clear();
     _valueController.clear();
 
-    widget.onSubmit(title, value);
+    widget.onSubmit(title, value, _selectedDate);
+  }
+
+  _showDatePicker() async {
+    DateTime dt = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2020),
+      lastDate: DateTime.now(),
+    );
+    if (dt != null) {
+      setState(() {
+        _selectedDate = dt;
+      });
+    }
   }
 
   @override
@@ -53,9 +69,30 @@ class _TransactionFormState extends State<TransactionForm> {
               onSubmitted: (_) => _submit(),
             ),
             Row(
+              children: <Widget>[
+                Expanded(
+                  child: Text(
+                    _selectedDate == null
+                        ? 'Nenhuma data selecionada'
+                        : 'Data selecionada: ${DateFormat('d/MM/y').format(_selectedDate)}',
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                ),
+                TextButton(
+                  child: Text(
+                    'Selecionar data',
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                  onPressed: _showDatePicker,
+                ),
+              ],
+            ),
+            Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                TextButton(
+                ElevatedButton(
                   onPressed: _submit,
                   child: Text(
                     'Adicionar Transação',

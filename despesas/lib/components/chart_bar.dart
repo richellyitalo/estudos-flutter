@@ -9,13 +9,15 @@ class ChartBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(percentage);
     return Column(
       children: <Widget>[
-        FittedBox(
-          child: Text(
-            '${value.toStringAsFixed(2)}',
-            style: TextStyle(fontSize: 12),
+        Container(
+          height: 20,
+          child: FittedBox(
+            child: Text(
+              '${value.toStringAsFixed(2)}',
+              style: TextStyle(fontSize: 12),
+            ),
           ),
         ),
         SizedBox(height: 5),

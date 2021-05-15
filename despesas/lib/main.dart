@@ -86,12 +86,12 @@ class _HomeAppState extends State<HomeApp> {
     }).toList();
   }
 
-  _addTransaction(String title, double value) {
+  _addTransaction(String title, double value, DateTime date) {
     final newTransaction = new Transaction(
       id: Random().nextDouble().toString(),
       title: title,
       value: value,
-      date: DateTime.now(),
+      date: date ?? DateTime.now(),
     );
 
     setState(() {

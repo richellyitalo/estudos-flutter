@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:despesas/components/chart_bar.dart';
 import 'package:flutter/material.dart';
 import '../models/transaction.dart';
@@ -29,7 +27,7 @@ class Chart extends StatelessWidget {
         'day': DateFormat.E().format(weekDayDate)[0],
         'value': totalSum,
       };
-    });
+    }).reversed.toList();
   }
 
   double get _weekTotalTransaction => groupedTransactions.fold(
