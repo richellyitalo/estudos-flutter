@@ -40,6 +40,8 @@ class TransactionList extends StatelessWidget {
                     height: constraint.maxHeight * 0.7,
                     child: Image.asset(
                       'assets/images/empty.png',
+                      color: Color.fromRGBO(255, 255, 255, 0.2),
+                      colorBlendMode: BlendMode.modulate,
                       fit: BoxFit.cover,
                     ),
                   ),
