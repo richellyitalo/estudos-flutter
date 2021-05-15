@@ -45,65 +45,75 @@ class _TransactionFormState extends State<TransactionForm> {
       });
     }
   }
+  
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Container(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          children: <Widget>[
-            TextField(
-              controller: _titleController,
-              decoration: InputDecoration(
-                labelText: 'Título',
-              ),
-              onSubmitted: (_) => _submit(),
-            ),
-            TextField(
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
-              controller: _valueController,
-              decoration: InputDecoration(
-                labelText: 'Valor',
-              ),
-              onSubmitted: (_) => _submit(),
-            ),
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: Text(
-                    _selectedDate == null
-                        ? 'Nenhuma data selecionada'
-                        : 'Data selecionada: ${DateFormat('d/MM/y').format(_selectedDate)}',
-                    style: TextStyle(color: Colors.grey),
-                  ),
+    return SingleChildScrollView(
+      child: Card(
+        child: Container(
+          padding: EdgeInsets.all(10),
+          // Solução para androids antigos
+          // padding: EdgeInsets.only(
+          //   top: 10,
+          //   right: 10,
+          //   left: 10,
+          //   bottom: 10 + MediaQuery.of(context).viewInsets.bottom,
+          // ),
+          child: Column(
+            children: <Widget>[
+              TextField(
+                controller: _titleController,
+                decoration: InputDecoration(
+                  labelText: 'Título',
                 ),
-                TextButton(
-                  child: Text(
-                    'Selecionar data',
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
+                onSubmitted: (_) => _submit(),
+              ),
+              TextField(
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                controller: _valueController,
+                decoration: InputDecoration(
+                  labelText: 'Valor',
+                ),
+                onSubmitted: (_) => _submit(),
+              ),
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Text(
+                      _selectedDate == null
+                          ? 'Nenhuma data selecionada'
+                          : 'Data selecionada: ${DateFormat('d/MM/y').format(_selectedDate)}',
+                      style: TextStyle(color: Colors.grey),
                     ),
                   ),
-                  onPressed: _showDatePicker,
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                ElevatedButton(
-                  onPressed: _submit,
-                  child: Text(
-                    'Adicionar Transação',
+                  TextButton(
+                    child: Text(
+                      'Selecionar data',
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                    onPressed: _showDatePicker,
                   ),
-                ),
-              ],
-            )
-          ],
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ElevatedButton(
+                    onPressed: _submit,
+                    child: Text(
+                      'Adicionar Transação',
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
+        elevation: 5,
       ),
-      elevation: 5,
     );
   }
 }

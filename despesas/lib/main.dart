@@ -45,6 +45,7 @@ class _HomeAppState extends State<HomeApp> {
   Future<void> _openModalFormTransaction(BuildContext context) {
     return showModalBottomSheet(
         context: context,
+        isScrollControlled: true,
         builder: (context) {
           return SingleChildScrollView(
             child: TransactionForm(_addTransaction),
