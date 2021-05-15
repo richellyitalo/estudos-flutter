@@ -80,6 +80,8 @@ class _HomeAppState extends State<HomeApp> {
     ),
   ];
 
+  bool _showGraph = true;
+
   List<Transaction> get _recentTransactions {
     return _transactions.where((t) {
       return t.date.isAfter(DateTime.now().subtract(Duration(days: 7)));
@@ -128,14 +130,30 @@ class _HomeAppState extends State<HomeApp> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Container(
-              height: availableHeight * 0.3,
-              child: Chart(_recentTransactions),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text('Show chart'),
+                Switch(
+                  value: _showGraph,
+                  onChanged: (value) {
+                    setState(() {
+                      _showGraph = value;
+                    });
+                  },
+                ),
+              ],
             ),
-            Container(
-              height: availableHeight * 0.7,
-              child: TransactionList(_transactions, _removeTransaction),
-            ),
+            if (_showGraph)
+              Container(
+                height: availableHeight * 0.3,
+                child: Chart(_recentTransactions),
+              ),
+            if (!_showGraph)
+              Container(
+                height: availableHeight * 0.7,
+                child: TransactionList(_transactions, _removeTransaction),
+              ),
           ],
         ),
       ),

@@ -11,26 +11,41 @@ class TransactionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return transactions.isEmpty
-        ? Column(
-            children: <Widget>[
-              SizedBox(height: 20),
-              Text(
-                'Nenhuma transação cadastrada',
-                style: TextStyle(
-                  fontSize: 20,
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Container(
-                height: 200,
-                child: Image.asset(
-                  'assets/images/empty.png',
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ],
+        ? LayoutBuilder(
+            builder: (context, constraint) {
+              return Column(
+                children: <Widget>[
+                  SizedBox(
+                    height: constraint.maxHeight * 0.05,
+                  ),
+                  Container(
+                    height: constraint.maxHeight * 0.2,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Nenhuma transação cadastrada',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: constraint.maxHeight * 0.05,
+                  ),
+                  Container(
+                    height: constraint.maxHeight * 0.7,
+                    child: Image.asset(
+                      'assets/images/empty.png',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ],
+              );
+            },
           )
         : ListView.builder(
             itemCount: transactions.length,
