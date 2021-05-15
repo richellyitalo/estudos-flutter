@@ -14,7 +14,7 @@ class _TransactionFormState extends State<TransactionForm> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _valueController = TextEditingController();
   final void Function(String, double, DateTime) onSubmit;
-  DateTime _selectedDate;
+  DateTime _selectedDate = DateTime.now();
 
   _TransactionFormState(this.onSubmit);
 
@@ -22,7 +22,7 @@ class _TransactionFormState extends State<TransactionForm> {
     final String title = _titleController.text;
     final double value = double.tryParse(_valueController.text) ?? 0.0;
 
-    if (title.isEmpty || value <= 0) {
+    if (title.isEmpty || value <= 0 || _selectedDate == null) {
       return;
     }
 
@@ -35,7 +35,7 @@ class _TransactionFormState extends State<TransactionForm> {
   _showDatePicker() async {
     DateTime dt = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: _selectedDate,
       firstDate: DateTime(2020),
       lastDate: DateTime.now(),
     );
