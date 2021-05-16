@@ -1,5 +1,7 @@
+import 'adaptives/text_field_adaptative.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'adaptives/button_adaptative.dart';
 
 class TransactionForm extends StatefulWidget {
   final void Function(String, double, DateTime) onSubmit;
@@ -45,7 +47,6 @@ class _TransactionFormState extends State<TransactionForm> {
       });
     }
   }
-  
 
   @override
   Widget build(BuildContext context) {
@@ -62,20 +63,16 @@ class _TransactionFormState extends State<TransactionForm> {
           // ),
           child: Column(
             children: <Widget>[
-              TextField(
-                controller: _titleController,
-                decoration: InputDecoration(
-                  labelText: 'Título',
-                ),
-                onSubmitted: (_) => _submit(),
+              TextFieldAdaptative(
+                inputController: _titleController,
+                placeholder: 'Título',
+                onSubmit: (_) => _submit(),
               ),
-              TextField(
+              TextFieldAdaptative(
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
-                controller: _valueController,
-                decoration: InputDecoration(
-                  labelText: 'Valor',
-                ),
-                onSubmitted: (_) => _submit(),
+                inputController: _valueController,
+                placeholder: 'Valor',
+                onSubmit: (_) => _submit(),
               ),
               Row(
                 children: <Widget>[
@@ -101,12 +98,10 @@ class _TransactionFormState extends State<TransactionForm> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  ElevatedButton(
-                    onPressed: _submit,
-                    child: Text(
-                      'Adicionar Transação',
-                    ),
-                  ),
+                  ButtonAdaptative(
+                    Text('Adicionar Transação'),
+                    _submit,
+                  )
                 ],
               )
             ],

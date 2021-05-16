@@ -1,7 +1,9 @@
+import 'dart:io';
 import 'package:despesas/components/chart.dart';
 import 'package:despesas/components/transaction_form.dart';
 import 'package:despesas/components/transaction_list.dart';
 import 'package:despesas/models/transaction.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
@@ -42,6 +44,8 @@ class HomeApp extends StatefulWidget {
 }
 
 class _HomeAppState extends State<HomeApp> {
+  final isIOS = Platform.isIOS;
+
   Future<void> _openModalFormTransaction(BuildContext context) {
     return showModalBottomSheet(
         context: context,
@@ -110,36 +114,60 @@ class _HomeAppState extends State<HomeApp> {
     });
   }
 
+  Widget _getIconAppBar(IconData iconData, Function onClick) {
+    return isIOS
+        ? GestureDetector(
+            child: Icon(iconData),
+            onTap: onClick,
+          )
+        : IconButton(
+            icon: Icon(iconData),
+            onPressed: onClick,
+          );
+  }
+
   @override
   Widget build(BuildContext context) {
-    bool isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
+    final mediaQuery = MediaQuery.of(context);
+    bool isLandscape = mediaQuery.orientation == Orientation.landscape;
+    final iconList = isIOS ? CupertinoIcons.list_dash : Icons.list;
+    final iconChart = isIOS ? CupertinoIcons.chart_bar : Icons.bar_chart;
 
-    final appBar = AppBar(
-      title: Text('Despesas semanais'),
-      actions: <Widget>[
-        if (isLandscape)
-          IconButton(
-            icon: Icon(_showingGraph ? Icons.list : Icons.bar_chart),
-            onPressed: () { 
-              setState(() {
-                _showingGraph = !_showingGraph;
-              });
-            },
-          ),
-        IconButton(
-          icon: Icon(Icons.add),
-          onPressed: () => _openModalFormTransaction(context),
+    final List<Widget> actionsAppBar = <Widget>[
+      if (isLandscape)
+        _getIconAppBar(
+          _showingGraph ? iconList : iconChart,
+          () {
+            setState(() {
+              _showingGraph = !_showingGraph;
+            });
+          },
         ),
-      ],
-    );
-    final availableHeight = MediaQuery.of(context).size.height -
-        appBar.preferredSize.height -
-        MediaQuery.of(context).padding.top;
+      _getIconAppBar(
+        isIOS ? CupertinoIcons.add : Icons.add,
+        () => _openModalFormTransaction(context),
+      ),
+    ];
+    final PreferredSizeWidget appBar = isIOS
+        ? CupertinoNavigationBar(
+            middle: Text('Despesas semanais1'),
+            trailing: Row(
+              children: actionsAppBar,
+              mainAxisSize: MainAxisSize.min,
+            ),
+          )
+        : AppBar(
+            title: Text('Despesas semanais'),
+            actions: actionsAppBar,
+          );
 
-    return Scaffold(
-      appBar: appBar,
-      body: SingleChildScrollView(
+    final availableHeight = mediaQuery.size.height -
+        appBar.preferredSize.height -
+        mediaQuery.padding.top;
+    // final Widget body =
+
+    final bodyPage = SafeArea(
+      child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
@@ -148,7 +176,8 @@ class _HomeAppState extends State<HomeApp> {
             //     mainAxisAlignment: MainAxisAlignment.center,
             //     children: <Widget>[
             //       Text('Mostrar gráfico'),
-            //       Switch(
+            //       Switch.adaptive(
+            //         activeColor: Theme.of(context).accentColor,
             //         value: _showingGraph,
             //         onChanged: (value) {
             //           setState(() {
@@ -171,10 +200,17 @@ class _HomeAppState extends State<HomeApp> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () => _openModalFormTransaction(context),
-      ),
+    );
+
+    return Scaffold(
+      appBar: appBar,
+      body: bodyPage,
+      floatingActionButton: Platform.isIOS
+          ? Container()
+          : FloatingActionButton(
+              child: Icon(Icons.add),
+              onPressed: () => _openModalFormTransaction(context),
+            ),
     );
   }
 }
