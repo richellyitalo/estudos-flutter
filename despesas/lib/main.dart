@@ -43,8 +43,26 @@ class HomeApp extends StatefulWidget {
   _HomeAppState createState() => _HomeAppState();
 }
 
-class _HomeAppState extends State<HomeApp> {
+class _HomeAppState extends State<HomeApp> with WidgetsBindingObserver {
   final isIOS = Platform.isIOS;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    print(state);
+  }
 
   Future<void> _openModalFormTransaction(BuildContext context) {
     return showModalBottomSheet(
@@ -150,14 +168,14 @@ class _HomeAppState extends State<HomeApp> {
     ];
     final PreferredSizeWidget appBar = isIOS
         ? CupertinoNavigationBar(
-            middle: Text('Despesas semanais1'),
+            middle: const Text('Despesas semanais1'),
             trailing: Row(
               children: actionsAppBar,
               mainAxisSize: MainAxisSize.min,
             ),
           )
         : AppBar(
-            title: Text('Despesas semanais'),
+            title: const Text('Despesas semanais'),
             actions: actionsAppBar,
           );
 

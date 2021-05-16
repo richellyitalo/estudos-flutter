@@ -79,7 +79,7 @@ class _TransactionFormState extends State<TransactionForm> {
                 placeholder: 'Valor',
                 onSubmit: (_) => _submit(),
               ),
-              !isIOS
+              isIOS
                   ? Container(
                       height: 180,
                       child: CupertinoDatePicker(
@@ -119,7 +119,7 @@ class _TransactionFormState extends State<TransactionForm> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   ButtonAdaptative(
-                    Text('Adicionar Transação'),
+                    const Text('Adicionar Transação'),
                     _submit,
                   )
                 ],
