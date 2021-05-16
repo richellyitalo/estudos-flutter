@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
+
 import 'adaptives/text_field_adaptative.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -17,6 +21,7 @@ class _TransactionFormState extends State<TransactionForm> {
   final TextEditingController _valueController = TextEditingController();
   final void Function(String, double, DateTime) onSubmit;
   DateTime _selectedDate = DateTime.now();
+  final bool isIOS = Platform.isIOS;
 
   _TransactionFormState(this.onSubmit);
 
@@ -74,27 +79,42 @@ class _TransactionFormState extends State<TransactionForm> {
                 placeholder: 'Valor',
                 onSubmit: (_) => _submit(),
               ),
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Text(
-                      _selectedDate == null
-                          ? 'Nenhuma data selecionada'
-                          : 'Data selecionada: ${DateFormat('d/MM/y').format(_selectedDate)}',
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  ),
-                  TextButton(
-                    child: Text(
-                      'Selecionar data',
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColor,
+              !isIOS
+                  ? Container(
+                      height: 180,
+                      child: CupertinoDatePicker(
+                        mode: CupertinoDatePickerMode.date,
+                        initialDateTime: _selectedDate,
+                        minimumDate: DateTime(2020),
+                        maximumDate: DateTime.now(),
+                        onDateTimeChanged: (dateTime) {
+                          setState(() {
+                            _selectedDate = dateTime;
+                          });
+                        },
                       ),
+                    )
+                  : Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Text(
+                            _selectedDate == null
+                                ? 'Nenhuma data selecionada'
+                                : 'Data selecionada: ${DateFormat('d/MM/y').format(_selectedDate)}',
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                        ),
+                        TextButton(
+                          child: Text(
+                            'Selecionar data',
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          ),
+                          onPressed: _showDatePicker,
+                        ),
+                      ],
                     ),
-                    onPressed: _showDatePicker,
-                  ),
-                ],
-              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
