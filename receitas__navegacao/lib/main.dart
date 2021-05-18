@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import './screens/categories_screen.dart';
+import 'package:receitas_navegacao/routes/routes.dart';
 
 void main() => runApp(MyApp());
 
@@ -16,11 +16,12 @@ class MyApp extends StatelessWidget {
         textTheme: ThemeData.light().textTheme.copyWith(
               headline2: TextStyle(
                 fontSize: 30,
-                fontFamily: 'RobotoCondensed'
+                fontFamily: 'RobotoCondensed',
               ),
             ),
       ),
-      home: CategoriesScreen(),
+      // home: CategoriesScreen(),
+      routes: Routes.routes,
     );
   }
 }
