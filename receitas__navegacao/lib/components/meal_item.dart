@@ -6,11 +6,61 @@ class MealItem extends StatelessWidget {
 
   const MealItem(this.meal);
 
+  void _handleClickItem() {
+    print('clickou');
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Text(
-        meal.duration.toString(),
+    return InkWell(
+      onTap: _handleClickItem,
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        elevation: 4,
+        margin: const EdgeInsets.all(10),
+        child: Column(
+          children: [
+            Stack(
+              children: <Widget>[
+                ClipRRect(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(15),
+                    topRight: Radius.circular(15),
+                  ),
+                  child: Image.network(
+                    meal.imageUrl,
+                    width: double.infinity,
+                    height: 250,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Positioned(
+                  bottom: 10,
+                  right: 10,
+                  child: Container(
+                    padding: EdgeInsets.all(15),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.black54,
+                    ),
+                    width: 300,
+                    child: Text(
+                      meal.title,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                      ),
+                      softWrap: true,
+                      overflow: TextOverflow.fade,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
