@@ -18,7 +18,6 @@ class CategoryItem extends StatelessWidget {
   // }
 
   _goToCategory(BuildContext context) {
-    print('vai pagar');
     Navigator.of(context).pushNamed(
       Routes.CATEGORY_MEALS,
       arguments: category,
