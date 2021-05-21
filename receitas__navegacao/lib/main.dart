@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:receitas_navegacao/routes/routes.dart';
+import './screens/categories_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -22,6 +23,11 @@ class MyApp extends StatelessWidget {
       ),
       // home: CategoriesScreen(),
       routes: Routes.routes,
+      onUnknownRoute: (settings) {
+        return MaterialPageRoute(
+          builder: (context) => CategoriesScreen(),
+        );
+      },
     );
   }
 }
