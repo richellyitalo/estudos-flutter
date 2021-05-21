@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/meal.dart';
+import '../components/meal_detail/meal_title.dart';
+import '../components/meal_detail/meal_content.dart';
 
 class MealDetailScreen extends StatelessWidget {
   @override
@@ -10,38 +12,20 @@ class MealDetailScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Detalhes da receita'),
       ),
-      body: Column(
-        children: <Widget>[
-          Container(
-            height: 200,
-            child: Image.network(
-              meal.imageUrl,
-              width: double.infinity,
-              fit: BoxFit.cover,
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.symmetric(
-              vertical: 7,
-            ),
-            child: Text(
-              'Ingredientes',
-              style: Theme.of(context).textTheme.headline6,
-            ),
-          ),
-          Container(
-            width: 300,
-            height: 250,
-            padding: EdgeInsets.all(10),
-            margin: EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.grey,
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Container(
+              height: 200,
+              child: Image.network(
+                meal.imageUrl,
+                width: double.infinity,
+                fit: BoxFit.cover,
               ),
-              borderRadius: BorderRadius.circular(5),
-              color: Colors.white,
             ),
-            child: ListView.builder(
+            MealTitle('Ingredientes'),
+            MealContent(
+              ListView.builder(
                 itemCount: meal.ingredients.length,
                 itemBuilder: (context, index) {
                   return Card(
@@ -55,9 +39,28 @@ class MealDetailScreen extends StatelessWidget {
                       child: Text(meal.ingredients[index]),
                     ),
                   );
-                }),
-          ),
-        ],
+                },
+              ),
+            ),
+            MealTitle('Passos'),
+            MealContent(
+              ListView.builder(
+                itemCount: meal.steps.length,
+                itemBuilder: (context, index) {
+                  return Column(
+                    children: [
+                      ListTile(
+                        leading: CircleAvatar(child: Text('${index + 1}')),
+                        title: Text(meal.steps[index]),
+                      ),
+                      Divider(),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
