@@ -15,11 +15,11 @@ class ProductsOverView extends StatelessWidget {
         ),
       ),
       body: GridView.builder(
-        padding: EdgeInsets.all(15),
+        padding: EdgeInsets.all(10),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          crossAxisSpacing: 15,
-          mainAxisSpacing: 15,
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
           childAspectRatio: 3 / 2,
         ),
         itemCount: _products.length,
