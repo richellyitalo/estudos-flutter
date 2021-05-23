@@ -48,7 +48,6 @@ class _MyAppState extends State<MyApp> {
       _favoriteMeals.contains(meal)
           ? _favoriteMeals.remove(meal)
           : _favoriteMeals.add(meal);
-      print(_favoriteMeals.length);
     });
   }
 
