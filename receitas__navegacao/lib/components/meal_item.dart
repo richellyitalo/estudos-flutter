@@ -7,16 +7,22 @@ class MealItem extends StatelessWidget {
 
   const MealItem(this.meal);
 
-  void _handleClickItem(BuildContext context) {
-    Navigator.of(context).pushNamed(
+  void _handleClickItem(BuildContext context) async {
+    var res = await Navigator.of(context).pushNamed(
       Routes.MEAL_DETAIL,
       arguments: meal,
     );
+
+    if (res == null) {
+      print('Não há nada');
+      return;
+    }
+
+    print(res);
   }
 
   @override
   Widget build(BuildContext context) {
-
     return InkWell(
       onTap: () => _handleClickItem(context),
       child: Card(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'categories_screen.dart';
 import 'favorites_screen.dart';
+import '../components/main_drawer.dart';
 
 class TabViewerScreen extends StatefulWidget {
   @override
@@ -29,6 +30,7 @@ class _TabViewerScreenState extends State<TabViewerScreen> {
           child: Text(_screensOptions[_selectedScreenIndex]['title']),
         ),
       ),
+      drawer: MainDrawer(),
       body: _screensOptions[_selectedScreenIndex]['screen'],
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Theme.of(context).primaryColor,
