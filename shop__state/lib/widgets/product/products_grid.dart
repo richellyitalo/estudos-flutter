@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../models/product.dart';
 import 'product_tile.dart';
@@ -7,7 +8,8 @@ class ProductsGrid extends StatelessWidget {
   const ProductsGrid({
     Key key,
     @required List<Product> products,
-  }) : _products = products, super(key: key);
+  })  : _products = products,
+        super(key: key);
 
   final List<Product> _products;
 
@@ -23,7 +25,10 @@ class ProductsGrid extends StatelessWidget {
       ),
       itemCount: _products.length,
       itemBuilder: (context, index) {
-        return ProductTile(_products[index]);
+        return ChangeNotifierProvider(
+          create: (context) => _products[index],
+          child: ProductTile(),
+        );
       },
     );
   }

@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../models/product.dart';
 import '../../util/app_routes.dart';
 
 class ProductTile extends StatelessWidget {
-  final Product product;
-  const ProductTile(this.product);
-
-
   @override
   Widget build(BuildContext context) {
+    final Product product = Provider.of<Product>(context);
+
     void _navigateToProductDetail() {
-      Navigator.of(context).pushNamed(
-        AppRoutes.PRODUCT_DETAIL,
-        arguments: product
-      );
+      Navigator.of(context)
+          .pushNamed(AppRoutes.PRODUCT_DETAIL, arguments: product);
     }
 
     return ClipRRect(
@@ -29,9 +26,9 @@ class ProductTile extends StatelessWidget {
         footer: GridTileBar(
           backgroundColor: Colors.black87,
           leading: IconButton(
-            icon: Icon(Icons.star),
+            icon: Icon(product.isFavorite ? Icons.favorite: Icons.favorite_border),
             color: Theme.of(context).accentColor,
-            onPressed: () {},
+            onPressed: product.toggleFavorite,
           ),
           title: Text(product.title),
           trailing: IconButton(
