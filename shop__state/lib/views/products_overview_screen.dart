@@ -1,32 +1,24 @@
 import 'package:flutter/material.dart';
-import '../data/dummy_data.dart';
+import 'package:provider/provider.dart';
+
 import '../models/product.dart';
-import '../widgets/product/product_tile.dart';
+import '../widgets/product/products_grid.dart';
+import '../providers/products_provider.dart';
 
 class ProductsOverView extends StatelessWidget {
-  final List<Product> _products = DUMMY_PRODUCTS;
-
   @override
   Widget build(BuildContext context) {
+    final ProductsProvider productsProvider =
+        Provider.of<ProductsProvider>(context);
+    final List<Product> _products = productsProvider.items;
+
     return Scaffold(
       appBar: AppBar(
         title: Center(
           child: Text('Minha Loja'),
         ),
       ),
-      body: GridView.builder(
-        padding: EdgeInsets.all(10),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
-          childAspectRatio: 3 / 2,
-        ),
-        itemCount: _products.length,
-        itemBuilder: (context, index) {
-          return ProductTile(_products[index]);
-        },
-      ),
+      body: ProductsGrid(products: _products),
     );
   }
 }
