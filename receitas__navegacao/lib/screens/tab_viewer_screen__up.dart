@@ -5,7 +5,7 @@ import 'favorites_screen.dart';
 /*
  * Navegação superior com tabs
  */
-class TabViewerScreen extends StatelessWidget {
+class TabViewerScreen_Up extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -31,7 +31,7 @@ class TabViewerScreen extends StatelessWidget {
         body: TabBarView(
           children: [
             CategoriesScreen(),
-            FavoritesScreen(),
+            // FavoritesScreen(),
           ],
         ),
       ),

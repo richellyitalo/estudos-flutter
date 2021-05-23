@@ -16,10 +16,14 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  List<Meal> _favoriteMeals = [];
+  Settings settings = Settings();
   List<Meal> _meals = DUMMY_MEALS;
 
   void _filterMeals(Settings settings) {
     setState(() {
+      this.settings = settings;
+
       _meals = DUMMY_MEALS.where((meal) {
         final bool filterGluttenFree =
             settings.isGlutenFree && !meal.isGlutenFree;
@@ -37,6 +41,19 @@ class _MyAppState extends State<MyApp> {
 
       print(_meals.length);
     });
+  }
+
+  void _setMealAsFavorite(meal) {
+    setState(() {
+      _favoriteMeals.contains(meal)
+          ? _favoriteMeals.remove(meal)
+          : _favoriteMeals.add(meal);
+      print(_favoriteMeals.length);
+    });
+  }
+
+  bool isMealFavorite(Meal meal) {
+    return _favoriteMeals.contains(meal);
   }
 
   @override
@@ -57,14 +74,14 @@ class _MyAppState extends State<MyApp> {
       ),
       // home: CategoriesScreen(),
       routes: {
-        Routes.HOME: (context) => TabViewerScreen(),
+        Routes.HOME: (context) => TabViewerScreen(_favoriteMeals),
         Routes.CATEGORY_MEALS: (context) => CategoryMealsScreen(_meals),
-        Routes.SETTINGS: (context) => SettingsScreen(_filterMeals),
-        Routes.MEAL_DETAIL: (context) => MealDetailScreen(),
+        Routes.SETTINGS: (context) => SettingsScreen(settings, _filterMeals),
+        Routes.MEAL_DETAIL: (context) => MealDetailScreen(_setMealAsFavorite, isMealFavorite),
       },
       onUnknownRoute: (settings) {
         return MaterialPageRoute(
-          builder: (context) => TabViewerScreen(),
+          builder: (context) => TabViewerScreen(_favoriteMeals),
         );
       },
     );
