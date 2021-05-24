@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../models/product.dart';
 import '../../util/app_routes.dart';
 
 class ProductTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final Product product = Provider.of<Product>(context);
+    final Product product = Provider.of<Product>(context, listen: false);
 
     void _navigateToProductDetail() {
       Navigator.of(context)
@@ -25,10 +26,16 @@ class ProductTile extends StatelessWidget {
         ),
         footer: GridTileBar(
           backgroundColor: Colors.black87,
-          leading: IconButton(
-            icon: Icon(product.isFavorite ? Icons.favorite: Icons.favorite_border),
-            color: Theme.of(context).accentColor,
-            onPressed: product.toggleFavorite,
+          leading: Consumer<Product>(
+            builder: (context, product, child) {
+              return IconButton(
+                icon: Icon(product.isFavorite
+                    ? Icons.favorite
+                    : Icons.favorite_border),
+                color: Theme.of(context).accentColor,
+                onPressed: product.toggleFavorite,
+              );
+            },
           ),
           title: Text(product.title),
           trailing: IconButton(
