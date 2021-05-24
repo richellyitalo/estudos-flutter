@@ -10,12 +10,32 @@ enum popupOptions {
   showAll,
 }
 
-class ProductsOverView extends StatelessWidget {
+class ProductsOverView extends StatefulWidget {
+  @override
+  _ProductsOverViewState createState() => _ProductsOverViewState();
+}
+
+class _ProductsOverViewState extends State<ProductsOverView> {
+  bool _showFavorites = false;
+
+  _handleSelectPopupMenu(val) {
+    setState(() {
+      if (val == popupOptions.showOnlyFavorites) {
+        _showFavorites = true;
+        return;
+      }
+
+      _showFavorites = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final ProductsProvider productsProvider =
         Provider.of<ProductsProvider>(context);
-    final List<Product> _products = productsProvider.items;
+    final List<Product> _products = _showFavorites
+        ? productsProvider.favoriteItems
+        : productsProvider.items;
 
     return Scaffold(
       appBar: AppBar(
@@ -24,14 +44,7 @@ class ProductsOverView extends StatelessWidget {
         ),
         actions: <Widget>[
           PopupMenuButton(
-            onSelected: (val) {
-              if (val == popupOptions.showOnlyFavorites) {
-                productsProvider.showFavorites();
-                return;
-              }
-
-              productsProvider.showAll();
-            },
+            onSelected: _handleSelectPopupMenu,
             icon: Icon(Icons.more_vert),
             itemBuilder: (context) => [
               PopupMenuItem(
