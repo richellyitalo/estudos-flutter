@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import '../models/product.dart';
 import '../widgets/product/products_grid.dart';
 import '../providers/products_provider.dart';
+import '../providers/cart_provider.dart';
+import '../widgets/badge.dart';
 
 enum popupOptions {
   showOnlyFavorites,
@@ -37,6 +39,8 @@ class _ProductsOverViewState extends State<ProductsOverView> {
         ? productsProvider.favoriteItems
         : productsProvider.items;
 
+    // final CartProvider cartProvider = Provider.of<CartProvider>(context, listen: false);
+
     return Scaffold(
       appBar: AppBar(
         title: Center(
@@ -56,6 +60,17 @@ class _ProductsOverViewState extends State<ProductsOverView> {
                 value: popupOptions.showAll,
               ),
             ],
+          ),
+          Consumer<CartProvider>(
+            builder: (context, cartProvider, child) {
+              return Badge(
+                value: cartProvider.itemCount.toString(),
+                child: IconButton(
+                  icon: Icon(Icons.shopping_cart),
+                  onPressed: () {},
+                ),
+              );
+            },
           ),
         ],
       ),

@@ -3,11 +3,14 @@ import 'package:provider/provider.dart';
 
 import '../../models/product.dart';
 import '../../util/app_routes.dart';
+import '../../providers/cart_provider.dart';
 
 class ProductTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Product product = Provider.of<Product>(context, listen: false);
+    final CartProvider cartProvider =
+        Provider.of<CartProvider>(context, listen: false);
 
     void _navigateToProductDetail() {
       Navigator.of(context)
@@ -38,10 +41,17 @@ class ProductTile extends StatelessWidget {
             },
           ),
           title: Text(product.title),
-          trailing: IconButton(
-            icon: Icon(Icons.shopping_cart),
-            color: Theme.of(context).accentColor,
-            onPressed: () {},
+          trailing: Consumer<CartProvider>(
+            builder: (context, cartProvider, child) {
+              return IconButton(
+                icon: Icon(Icons.shopping_cart),
+                color: Theme.of(context).accentColor,
+                onPressed: () {
+                  cartProvider.add(product);
+                  print(cartProvider.itemCount);
+                },
+              );
+            },
           ),
         ),
       ),
