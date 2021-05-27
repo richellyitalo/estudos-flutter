@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/cart_provider.dart';
-import '../widgets/cart_item_widget.dart';
+import '../../providers/cart_provider.dart';
+import 'components/cart_item_widget.dart';
 
 class CartScreen extends StatelessWidget {
   @override
@@ -42,14 +42,29 @@ class CartScreen extends StatelessWidget {
             ),
           ),
           SizedBox(height: 10),
-          Expanded(
-            child: ListView.builder(
-              itemCount: cartItems.length,
-              itemBuilder: (context, index) {
-                return CartItemWidget(cartItems[index]);
-              },
-            ),
-          )
+          if (cartItems.length == 0)
+            Card(
+              margin: EdgeInsets.fromLTRB(25, 25, 25, 5),
+              color: Colors.yellow.shade50,
+              child: Padding(
+                padding: const EdgeInsets.all(15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('Não há itens no carrinho... :('),
+                  ],
+                ),
+              ),
+            )
+          else
+            Expanded(
+              child: ListView.builder(
+                itemCount: cartItems.length,
+                itemBuilder: (context, index) {
+                  return CartItemWidget(cartItems[index]);
+                },
+              ),
+            )
         ],
       ),
     );

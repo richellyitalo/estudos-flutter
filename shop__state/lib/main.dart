@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import './views/products_overview_screen.dart';
 import './util/app_routes.dart';
 import './views/product_detail_screen.dart';
-import './views/cart_screen.dart';
+import 'views/cart_screen/cart_screen.dart';
 import './providers/products_provider.dart';
 import './providers/cart_provider.dart';
 

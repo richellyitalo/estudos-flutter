@@ -1,9 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/foundation.dart';
 
 import '../models/product.dart';
 
 class CartItem {
   final String id;
+  final String productId;
   final String title;
   final double price;
   final String imageUrl;
@@ -12,6 +15,7 @@ class CartItem {
   CartItem({
     @required this.id,
     @required this.title,
+    @required this.productId,
     @required this.price,
     @required this.imageUrl,
     @required this.quantity,
@@ -41,7 +45,8 @@ class CartProvider with ChangeNotifier {
     if (_items.containsKey(product.id)) {
       _items.update(product.id, (cartItemExistent) {
         return CartItem(
-          id: product.id,
+          id: cartItemExistent.id,
+          productId: product.id,
           title: product.title,
           price: product.price,
           imageUrl: product.imageUrl,
@@ -56,7 +61,8 @@ class CartProvider with ChangeNotifier {
 
     _items.putIfAbsent(product.id, () {
       return CartItem(
-        id: product.id,
+        id: Random().nextDouble().toString(),
+        productId: product.id,
         title: product.title,
         price: product.price,
         imageUrl: product.imageUrl,
@@ -64,6 +70,11 @@ class CartProvider with ChangeNotifier {
       );
     });
 
+    notifyListeners();
+  }
+
+  void removeItem(String productId) {
+    _items.remove(productId);
     notifyListeners();
   }
 }

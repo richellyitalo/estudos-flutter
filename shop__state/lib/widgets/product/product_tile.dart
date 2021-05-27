@@ -48,7 +48,13 @@ class ProductTile extends StatelessWidget {
                 color: Theme.of(context).accentColor,
                 onPressed: () {
                   cartProvider.add(product);
-                  print(cartProvider.itemCount);
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('${product.title} adicionado ao carrinho'),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
                 },
               );
             },
