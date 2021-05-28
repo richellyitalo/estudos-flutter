@@ -9,8 +9,6 @@ class ProductTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Product product = Provider.of<Product>(context, listen: false);
-    final CartProvider cartProvider =
-        Provider.of<CartProvider>(context, listen: false);
 
     void _navigateToProductDetail() {
       Navigator.of(context)
@@ -49,10 +47,18 @@ class ProductTile extends StatelessWidget {
                 onPressed: () {
                   cartProvider.add(product);
 
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text('${product.title} adicionado ao carrinho'),
-                      backgroundColor: Colors.green,
+                      duration: Duration(seconds: 1),
+                      action: SnackBarAction(
+                        label: 'DESFAZER',
+                        onPressed: () {
+                          cartProvider.removeSingleItem(product.id);
+                        },
+                      ),
                     ),
                   );
                 },

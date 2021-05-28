@@ -7,7 +7,6 @@ import '../widgets/product/products_grid.dart';
 import '../providers/products_provider.dart';
 import '../providers/cart_provider.dart';
 import '../widgets/badge.dart';
-import '../widgets/main_drawer.dart';
 
 enum popupOptions {
   showOnlyFavorites,
