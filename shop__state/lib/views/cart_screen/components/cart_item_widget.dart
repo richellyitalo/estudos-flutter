@@ -14,6 +14,36 @@ class CartItemWidget extends StatelessWidget {
 
     return Dismissible(
       key: ValueKey(cartItem.id),
+      confirmDismiss: (dismissDirection) {
+        return showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Remover item do carrinho'),
+              content: Text('Deseja remover o item do carrinho?'),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('Não'),
+                  onPressed: () {
+                    return Navigator.of(context).pop(false);
+                  },
+                ),
+                TextButton(
+                  child: Text(
+                    'Sim',
+                    style: TextStyle(
+                      color: Colors.purple,
+                    ),
+                  ),
+                  onPressed: () {
+                    return Navigator.of(context).pop(true);
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      },
       direction: DismissDirection.endToStart,
       background: Container(
         decoration: BoxDecoration(
@@ -33,6 +63,7 @@ class CartItemWidget extends StatelessWidget {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('${cartItem.title} removido do carrinho'),
+            duration: Duration(seconds: 1),
           ),
         );
       },

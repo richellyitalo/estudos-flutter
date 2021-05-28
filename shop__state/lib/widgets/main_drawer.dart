@@ -45,6 +45,15 @@ class MainDrawer extends StatelessWidget {
               Navigator.of(context).pushReplacementNamed(AppRoutes.ORDERS);
             },
           ),
+          Divider(),
+          ListTile(
+            leading: Icon(Icons.badge),
+            title: Text('Produtos'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.of(context).pushReplacementNamed(AppRoutes.PRODUCTS);
+            },
+          ),
         ],
       ),
     );
