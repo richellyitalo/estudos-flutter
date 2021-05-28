@@ -7,6 +7,7 @@ import '../widgets/product/products_grid.dart';
 import '../providers/products_provider.dart';
 import '../providers/cart_provider.dart';
 import '../widgets/badge.dart';
+import '../widgets/main_drawer.dart';
 
 enum popupOptions {
   showOnlyFavorites,
@@ -44,10 +45,21 @@ class _ProductsOverViewState extends State<ProductsOverView> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Center(
-          child: Text('Minha Loja'),
-        ),
+        title: Text('Minha Loja'),
         actions: <Widget>[
+          Consumer<CartProvider>(
+            builder: (context, cartProvider, child) {
+              return Badge(
+                value: cartProvider.itemCount.toString(),
+                child: IconButton(
+                  icon: Icon(Icons.shopping_cart),
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(AppRoutes.CART);
+                  },
+                ),
+              );
+            },
+          ),
           PopupMenuButton(
             onSelected: _handleSelectPopupMenu,
             icon: Icon(Icons.more_vert),
@@ -61,19 +73,6 @@ class _ProductsOverViewState extends State<ProductsOverView> {
                 value: popupOptions.showAll,
               ),
             ],
-          ),
-          Consumer<CartProvider>(
-            builder: (context, cartProvider, child) {
-              return Badge(
-                value: cartProvider.itemCount.toString(),
-                child: IconButton(
-                  icon: Icon(Icons.shopping_cart),
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(AppRoutes.CART);
-                  },
-                ),
-              );
-            },
           ),
         ],
       ),
