@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../models/product.dart';
 import '../../../util/app_routes.dart';
+import '../../../providers/products_provider.dart';
 
 class ProductLoop extends StatelessWidget {
   final Product product;
@@ -33,7 +35,45 @@ class ProductLoop extends StatelessWidget {
               ),
               IconButton(
                 icon: Icon(Icons.delete),
-                onPressed: () {},
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text('Remover produto'),
+                        content: Text('Deseja mesmo remover o produto?'),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text(
+                              'Não',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          TextButton(
+                            child: Text('Sim'),
+                            onPressed: () {
+                              Provider.of<ProductsProvider>(context,
+                                      listen: false)
+                                  .removeProduct(product);
+
+                              ScaffoldMessenger.of(context)
+                                  .hideCurrentSnackBar();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Produto removido!'),
+                                ),
+                              );
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
                 color: Colors.red,
               ),
             ],

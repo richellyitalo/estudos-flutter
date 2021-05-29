@@ -38,6 +38,21 @@ class ProductsProvider with ChangeNotifier {
 
     notifyListeners();
   }
+
+  void removeProduct(Product product) {
+    if (product == null || product.id == null) {
+      return;
+    }
+
+    int index = _items.indexWhere((prod) => prod.id == product.id);
+    if (index == -1) {
+      return;
+    }
+
+    _items.removeWhere((prod) => prod.id == product.id);
+
+    notifyListeners();
+  }
 }
 
 // bool _showFavorites = false;

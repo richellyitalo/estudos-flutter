@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 
 import '../../models/product.dart';
 import '../../providers/products_provider.dart';
-import '../../util/app_routes.dart';
 
 class ProductNewScreen extends StatefulWidget {
   ProductNewScreen({Key key}) : super(key: key);
