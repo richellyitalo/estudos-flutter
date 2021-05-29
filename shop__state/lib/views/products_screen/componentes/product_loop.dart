@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../models/product.dart';
+import '../../../util/app_routes.dart';
 
 class ProductLoop extends StatelessWidget {
   final Product product;
@@ -23,7 +24,12 @@ class ProductLoop extends StatelessWidget {
               IconButton(
                 icon: Icon(Icons.edit),
                 color: Colors.blue,
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pushNamed(
+                    AppRoutes.PRODUCT_NEW,
+                    arguments: product,
+                  );
+                },
               ),
               IconButton(
                 icon: Icon(Icons.delete),
