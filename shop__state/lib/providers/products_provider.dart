@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import '../models/product.dart';
@@ -16,8 +18,9 @@ class ProductsProvider with ChangeNotifier {
     return _items.length;
   }
 
-  void add(Product product) {
-    _items.add(product);
+  void addProduct(Product newProduct) {
+    newProduct.id = Random().nextDouble().toString();
+    _items.add(newProduct);
     notifyListeners();
   }
 }
