@@ -13,6 +13,8 @@ class Product with ChangeNotifier {
   final String imageUrl;
   bool isFavorite;
 
+  final _baseUrl = '${Constants.BASE_URL}products';
+
   Product({
     this.id,
     @required this.title,
@@ -26,7 +28,7 @@ class Product with ChangeNotifier {
     isFavorite = !isFavorite;
     notifyListeners();
 
-    final response = await http.patch(Uri.parse('$BASE_URL/$id.json'),
+    final response = await http.patch(Uri.parse('$_baseUrl/$id.json'),
         body: jsonEncode({'isFavorite': isFavorite}));
     if (response.statusCode >= 400) {
       isFavorite = !isFavorite;

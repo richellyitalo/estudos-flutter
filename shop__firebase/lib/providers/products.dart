@@ -7,7 +7,7 @@ import '../exceptions/http_exception.dart';
 import '../utils/constants.dart';
 
 class Products with ChangeNotifier {
-  Uri _baseUrl = BASE_URL;
+  Uri _baseUrl = Uri.parse('${Constants.BASE_URL}products');
   List<Product> _items = [];
 
   List<Product> get items => [..._items];
@@ -33,7 +33,7 @@ class Products with ChangeNotifier {
         price: product['price'],
         description: product['description'],
         imageUrl: product['imageUrl'],
-        isFavorite: false,
+        isFavorite: product['isFavorite'],
       ));
     });
 
