@@ -19,12 +19,20 @@ class ProductOverviewScreen extends StatefulWidget {
 
 class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
   bool _showFavoriteOnly = false;
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
+    _loadProducts();
+  }
 
-    Provider.of<Products>(context, listen: false).loadProducts();
+  void _loadProducts() async {
+    await Provider.of<Products>(context, listen: false).loadProducts();
+
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override
@@ -69,7 +77,11 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
           )
         ],
       ),
-      body: ProductGrid(_showFavoriteOnly),
+      body: _isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : ProductGrid(_showFavoriteOnly),
       drawer: AppDrawer(),
     );
   }

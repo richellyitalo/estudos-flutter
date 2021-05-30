@@ -3,10 +3,11 @@ import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 import './product.dart';
+import '../exceptions/http_exception.dart';
+import '../utils/constants.dart';
 
 class Products with ChangeNotifier {
-  Uri _baseUrl = Uri.parse(
-      'https://curso-cod3r-flutter---shop-default-rtdb.asia-southeast1.firebasedatabase.app/products');
+  Uri _baseUrl = BASE_URL;
   List<Product> _items = [];
 
   List<Product> get items => [..._items];
@@ -32,11 +33,13 @@ class Products with ChangeNotifier {
         price: product['price'],
         description: product['description'],
         imageUrl: product['imageUrl'],
-        isFavorite: product['isFavorite'],
+        isFavorite: false,
       ));
     });
 
     notifyListeners();
+
+    return;
   }
 
   Future<void> addProduct(Product newProduct) async {
@@ -66,24 +69,46 @@ class Products with ChangeNotifier {
     return response;
   }
 
-  void updateProduct(Product product) {
+  Future<void> updateProduct(Product product) async {
     if (product == null || product.id == null) {
       return;
     }
 
     final index = _items.indexWhere((prod) => prod.id == product.id);
     if (index >= 0) {
+      await http.put(
+        Uri.parse('$_baseUrl/${product.id}.json'),
+        body: jsonEncode({
+          'title': product.title,
+          'price': product.price,
+          'description': product.description,
+          'imageUrl': product.imageUrl,
+        }),
+      );
       _items[index] = product;
       notifyListeners();
     }
   }
 
-  void deleteProduct(String id) {
+  Future<void> deleteProduct(String id) async {
     final index = _items.indexWhere((prod) => prod.id == id);
-    if (index >= 0) {
-      _items.removeWhere((prod) => prod.id == id);
-      notifyListeners();
+    if (index == -1) {
+      return;
     }
+    final Product productBackup = _items[index];
+
+    _items.removeWhere((prod) => prod.id == id);
+    notifyListeners();
+
+    final response = await http.delete(Uri.parse('$_baseUrl/$id/.json'));
+    if (response.statusCode >= 400) {
+      _items.insert(0, productBackup);
+      notifyListeners();
+
+      throw HttpException('Ocorreu um problema');
+    }
+
+    return response;
   }
 }
 

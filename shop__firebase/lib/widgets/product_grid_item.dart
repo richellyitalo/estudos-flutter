@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../providers/product.dart';
 import '../providers/cart.dart';
 import '../utils/app_routes.dart';
+import '../exceptions/http_exception.dart';
 
 class ProductGridItem extends StatelessWidget {
   @override
@@ -32,8 +33,19 @@ class ProductGridItem extends StatelessWidget {
               icon: Icon(
                   product.isFavorite ? Icons.favorite : Icons.favorite_border),
               color: Theme.of(context).accentColor,
-              onPressed: () {
-                product.toggleFavorite();
+              onPressed: () async {
+                try {
+                  await product.toggleFavorite();
+                } catch (error) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        error.toString(),
+                      ),
+                      backgroundColor: Colors.red.shade400,
+                    ),
+                  );
+                }
               },
             ),
           ),
