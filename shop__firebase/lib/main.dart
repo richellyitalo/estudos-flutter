@@ -14,6 +14,7 @@ import './views/login_screen.dart';
 import './providers/products.dart';
 import './providers/cart.dart';
 import './providers/orders.dart';
+import './providers/auth.dart';
 
 void main() => runApp(MyApp());
 
@@ -30,6 +31,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => new Orders(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => new Auth(),
         ),
       ],
       child: MaterialApp(

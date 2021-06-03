@@ -1,6 +1,10 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/auth.dart';
+import '../exceptions/http_exception.dart';
 
 enum AuthMode { Login, Signup }
 
@@ -15,8 +19,10 @@ class _LoginScreenState extends State<LoginScreen> {
   AuthMode _authMode = AuthMode.Login;
   final _textPasswordController = TextEditingController();
   final _form = GlobalKey<FormState>();
+  bool _isLoading = false;
+  Map<String, String> _formData = {'email': '', 'password': ''};
 
-  void _formSubmit() {
+  Future<void> _formSubmit() async {
     bool formIsValid = _form.currentState.validate();
 
     if (!formIsValid) {
@@ -24,11 +30,45 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     _form.currentState.save();
+
+    Auth authProvider = Provider.of<Auth>(context, listen: false);
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    String errorMessage = '';
+
+    try {
+      if (_authMode == AuthMode.Login) {
+        await authProvider.signin(_formData['email'], _formData['password']);
+      } else {
+        await authProvider.signup(_formData['email'], _formData['password']);
+      }
+    } on HttpException catch (error) {
+      errorMessage = error.toString();
+    } catch (error) {
+      errorMessage = error.toString();
+    }
+
+    if (errorMessage.isNotEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            errorMessage,
+          ),
+          backgroundColor: Colors.red.shade400,
+        ),
+      );
+    }
+
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    Map<String, String> _formData = {'email': '', 'password': ''};
     final deviceSize = MediaQuery.of(context).size;
     final _widthSize = MediaQuery.of(context).size.width;
 
@@ -111,6 +151,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                     return 'Informe a senha';
                                   }
 
+                                  if (val.length < 6) {
+                                    return 'Informe pelo menos 6 caracteres';
+                                  }
+
                                   return null;
                                 },
                                 onSaved: (val) {
@@ -158,14 +202,18 @@ class _LoginScreenState extends State<LoginScreen> {
                                   )
                                 : Container(),
                             SizedBox(height: 10),
-                            SizedBox(
-                              width: double.infinity,
-                              child: ElevatedButton(
-                                // style: TextButton.styleFrom(primary: Colors.purple),
-                                child: Text('Acessar'),
-                                onPressed: _formSubmit,
-                              ),
-                            ),
+                            _isLoading
+                                ? CircularProgressIndicator()
+                                : SizedBox(
+                                    width: double.infinity,
+                                    child: ElevatedButton(
+                                      // style: TextButton.styleFrom(primary: Colors.purple),
+                                      child: Text(_authMode == AuthMode.Login
+                                          ? 'Acessar'
+                                          : 'Registrar'),
+                                      onPressed: _formSubmit,
+                                    ),
+                                  ),
                             _footerWidget(),
                           ],
                         ),
@@ -226,7 +274,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     return TextButton(
-      child: Text('Já posso cadastro'),
+      child: Text('Já possuo conta'),
       onPressed: () {
         setState(() {
           _authMode = AuthMode.Login;
