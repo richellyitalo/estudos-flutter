@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-import '../exceptions/http_exception.dart';
+import '../exceptions/auth_exception.dart';
 
 class Auth with ChangeNotifier {
   Future<void> signup(String email, String password) async {
@@ -17,15 +17,20 @@ class Auth with ChangeNotifier {
       }),
     );
 
+    final responseBody = jsonDecode(response.body);
+    if (responseBody['error'] != null) {
+      throw AuthException(responseBody['error']['message']);
+    }
+
     if (response.statusCode >= 400) {
-      throw HttpException(jsonDecode(response.body)['error']['message']);
+      throw Exception('Ocorreu um erro inesperado.');
     }
 
     print(jsonDecode(response.body));
 
     return Future.value();
   }
-  
+
   Future<void> signin(String email, String password) async {
     final _urlSignup =
         'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCwurBrzLDFWVr4DgB0JoGe86XYxfbLGK4';
@@ -39,8 +44,13 @@ class Auth with ChangeNotifier {
       }),
     );
 
+    final responseBody = jsonDecode(response.body);
+    if (responseBody['error'] != null) {
+      throw AuthException(responseBody['error']['message']);
+    }
+
     if (response.statusCode >= 400) {
-      throw HttpException(jsonDecode(response.body)['error']['message']);
+      throw Exception('Ocorreu um erro inesperado.');
     }
 
     print(jsonDecode(response.body));

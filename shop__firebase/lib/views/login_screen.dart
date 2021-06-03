@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/auth.dart';
-import '../exceptions/http_exception.dart';
+import '../exceptions/auth_exception.dart';
 
 enum AuthMode { Login, Signup }
 
@@ -22,6 +22,25 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isLoading = false;
   Map<String, String> _formData = {'email': '', 'password': ''};
 
+  Future<void> _showErrorDialog(String text) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Ocorreu um erro'),
+            content: Text(text),
+            actions: <Widget>[
+              TextButton(
+                child: Text('Ok'),
+                onPressed: () {
+                  return Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        });
+  }
+
   Future<void> _formSubmit() async {
     bool formIsValid = _form.currentState.validate();
 
@@ -37,29 +56,16 @@ class _LoginScreenState extends State<LoginScreen> {
       _isLoading = true;
     });
 
-    String errorMessage = '';
-
     try {
       if (_authMode == AuthMode.Login) {
         await authProvider.signin(_formData['email'], _formData['password']);
       } else {
         await authProvider.signup(_formData['email'], _formData['password']);
       }
-    } on HttpException catch (error) {
-      errorMessage = error.toString();
+    } on AuthException catch (error) {
+      _showErrorDialog(error.toString());
     } catch (error) {
-      errorMessage = error.toString();
-    }
-
-    if (errorMessage.isNotEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            errorMessage,
-          ),
-          backgroundColor: Colors.red.shade400,
-        ),
-      );
+      _showErrorDialog(error.toString());
     }
 
     setState(() {
