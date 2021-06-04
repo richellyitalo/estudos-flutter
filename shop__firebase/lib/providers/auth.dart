@@ -5,6 +5,23 @@ import 'package:http/http.dart' as http;
 import '../exceptions/auth_exception.dart';
 
 class Auth with ChangeNotifier {
+  String _token;
+  DateTime _expireDate;
+
+  bool get isAuth {
+    return token != null;
+  }
+
+  String get token {
+    if (_token != null &&
+        _expireDate != null &&
+        _expireDate.isAfter(DateTime.now())) {
+      return _token;
+    }
+
+    return null;
+  }
+
   Future<void> signup(String email, String password) async {
     final _urlSignup =
         'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCwurBrzLDFWVr4DgB0JoGe86XYxfbLGK4';
@@ -26,7 +43,7 @@ class Auth with ChangeNotifier {
       throw Exception('Ocorreu um erro inesperado.');
     }
 
-    print(jsonDecode(response.body));
+    _setTokenAndExpireDate(responseBody['idToken'], responseBody['expiresIn']);
 
     return Future.value();
   }
@@ -53,8 +70,15 @@ class Auth with ChangeNotifier {
       throw Exception('Ocorreu um erro inesperado.');
     }
 
-    print(jsonDecode(response.body));
+    _setTokenAndExpireDate(responseBody['idToken'], int.parse(responseBody['expiresIn']));
 
     return Future.value();
+  }
+
+  void _setTokenAndExpireDate(String token, int seconds) {
+    _token = token;
+    _expireDate = DateTime.now().add(Duration(seconds: seconds));
+
+    notifyListeners();
   }
 }

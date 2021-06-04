@@ -9,6 +9,9 @@ import '../utils/constants.dart';
 class Products with ChangeNotifier {
   Uri _baseUrl = Uri.parse('${Constants.BASE_URL}products');
   List<Product> _items = [];
+  String _token;
+
+  Products(this._token, this._items);
 
   List<Product> get items => [..._items];
 
@@ -21,7 +24,7 @@ class Products with ChangeNotifier {
   }
 
   Future<void> loadProducts() async {
-    final response = await http.get(Uri.parse('$_baseUrl.json'));
+    final response = await http.get(Uri.parse('$_baseUrl.json?auth=$_token'));
     final data = json.decode(response.body);
 
     _items.clear();
@@ -52,7 +55,7 @@ class Products with ChangeNotifier {
     });
 
     final response = await http.post(
-      Uri.parse('$_baseUrl.json'),
+      Uri.parse('$_baseUrl.json?auth=$_token'),
       body: productJSON,
     );
 
@@ -77,7 +80,7 @@ class Products with ChangeNotifier {
     final index = _items.indexWhere((prod) => prod.id == product.id);
     if (index >= 0) {
       await http.put(
-        Uri.parse('$_baseUrl/${product.id}.json'),
+        Uri.parse('$_baseUrl/${product.id}.json?auth=$_token'),
         body: jsonEncode({
           'title': product.title,
           'price': product.price,
@@ -100,7 +103,7 @@ class Products with ChangeNotifier {
     _items.removeWhere((prod) => prod.id == id);
     notifyListeners();
 
-    final response = await http.delete(Uri.parse('$_baseUrl/$id/.json'));
+    final response = await http.delete(Uri.parse('$_baseUrl/$id/.json?auth=$_token'));
     if (response.statusCode >= 400) {
       _items.insert(0, productBackup);
       notifyListeners();

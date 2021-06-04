@@ -58,7 +58,6 @@ class ProductItem extends StatelessWidget {
                       await Provider.of<Products>(context, listen: false)
                           .deleteProduct(product.id);
                     } on HttpException catch (error) {
-                      print(error);
                       return scaffold.showSnackBar(
                         SnackBar(
                           content: Text(error.toString()),

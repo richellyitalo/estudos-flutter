@@ -20,7 +20,10 @@ class _LoginScreenState extends State<LoginScreen> {
   final _textPasswordController = TextEditingController();
   final _form = GlobalKey<FormState>();
   bool _isLoading = false;
-  Map<String, String> _formData = {'email': '', 'password': ''};
+  Map<String, String> _formData = {
+    'email': '',
+    'password': '',
+  };
 
   Future<void> _showErrorDialog(String text) {
     return showDialog(
@@ -131,8 +134,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                 },
                                 onSaved: (val) {
                                   _formData['email'] = val.trim();
-
-                                  debugPrint(_formData.toString());
                                 },
                               ),
                             ),
