@@ -10,8 +10,13 @@ class Products with ChangeNotifier {
   Uri _baseUrl = Uri.parse('${Constants.BASE_URL}products');
   List<Product> _items = [];
   String _token;
+  String _userId;
 
-  Products(this._token, this._items);
+  Products([
+    this._token,
+    this._userId,
+    this._items = const [],
+  ]);
 
   List<Product> get items => [..._items];
 
@@ -27,16 +32,22 @@ class Products with ChangeNotifier {
     final response = await http.get(Uri.parse('$_baseUrl.json?auth=$_token'));
     final data = json.decode(response.body);
 
+    final favoriteProducts = await _getFavoriteProducts();
+
     _items.clear();
 
     data.forEach((productId, product) {
+      final bool isFavorite = favoriteProducts == null
+          ? false
+          : favoriteProducts[productId] ?? false;
+
       _items.add(Product(
         id: productId,
         title: product['title'],
         price: product['price'],
         description: product['description'],
         imageUrl: product['imageUrl'],
-        isFavorite: product['isFavorite'],
+        isFavorite: isFavorite,
       ));
     });
 
@@ -45,13 +56,18 @@ class Products with ChangeNotifier {
     return;
   }
 
+  Future<Map<String, dynamic>> _getFavoriteProducts() async {
+    final response = await http.get(Uri.parse(
+        '${Constants.BASE_URL}/userFavorites/$_userId.json?auth=$_token'));
+    return jsonDecode(response.body);
+  }
+
   Future<void> addProduct(Product newProduct) async {
     final productJSON = json.encode({
       'title': newProduct.title,
       'price': newProduct.price,
       'description': newProduct.description,
       'imageUrl': newProduct.imageUrl,
-      'isFavorite': false,
     });
 
     final response = await http.post(
@@ -103,7 +119,8 @@ class Products with ChangeNotifier {
     _items.removeWhere((prod) => prod.id == id);
     notifyListeners();
 
-    final response = await http.delete(Uri.parse('$_baseUrl/$id/.json?auth=$_token'));
+    final response =
+        await http.delete(Uri.parse('$_baseUrl/$id/.json?auth=$_token'));
     if (response.statusCode >= 400) {
       _items.insert(0, productBackup);
       notifyListeners();
