@@ -88,6 +88,13 @@ class Auth with ChangeNotifier {
     return Future.value();
   }
 
+  void logout() {
+    _userId = null;
+    _token = null;
+    _expireDate = null;
+    notifyListeners();
+  }
+
   void _saveAuthData(String token, String userId, int seconds) {
     _token = token;
     _expireDate = DateTime.now().add(Duration(seconds: seconds));
