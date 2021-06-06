@@ -57,6 +57,8 @@ class Auth with ChangeNotifier {
       responseBody['expiresIn'],
     );
 
+    notifyListeners();
+
     return Future.value();
   }
 
@@ -88,10 +90,12 @@ class Auth with ChangeNotifier {
       int.parse(responseBody['expiresIn']),
     );
 
+    notifyListeners();
+
     return Future.value();
   }
 
-  void logout() {
+  void logout() async {
     _userId = null;
     _token = null;
     _expireDate = null;
@@ -99,6 +103,8 @@ class Auth with ChangeNotifier {
     if (_timerLogout != null) {
       _timerLogout.cancel();
     }
+
+    await Store.remove('auth');
 
     notifyListeners();
   }
@@ -111,11 +117,10 @@ class Auth with ChangeNotifier {
     Store.saveMap('auth', {
       'token': token,
       'userId': userId,
-      'expireData': _expireDate.toIso8601String(),
+      'expireDate': _expireDate.toIso8601String(),
     });
 
     _setAutoLogout();
-    notifyListeners();
   }
 
   void _setAutoLogout() {
@@ -128,11 +133,24 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> autoLogin() async {
-    await Future.delayed(Duration(seconds: 5));
+    if (isAuth) {
+      return Future.value();
+    }
+
     final authData = await Store.getMap('auth');
     if (authData == null) {
       return Future.value();
     }
+
+    DateTime expireDate = DateTime.parse(authData['expireDate']);
+    if (expireDate.isBefore(DateTime.now())) {
+      return Future.value();
+    }
+
+    int secondsToExpire = expireDate.difference(DateTime.now()).inSeconds;
+    _saveAuthData(authData['token'], authData['userId'], secondsToExpire);
+
+    notifyListeners();
 
     return Future.value();
   }

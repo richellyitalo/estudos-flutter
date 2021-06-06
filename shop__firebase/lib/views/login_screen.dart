@@ -17,7 +17,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   AuthMode _authMode = AuthMode.Login;
-  final _textPasswordController = TextEditingController(text: '111111');
+  final _textPasswordController = TextEditingController();
   final _form = GlobalKey<FormState>();
   bool _isLoading = false;
   Map<String, String> _formData = {
@@ -120,7 +120,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                 decoration: const InputDecoration(
                                   labelText: 'E-mail',
                                 ),
-                                initialValue: 'email@email.com',
                                 keyboardType: TextInputType.emailAddress,
                                 validator: (val) {
                                   if (val.trim().isEmpty) {
