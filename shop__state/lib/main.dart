@@ -12,6 +12,8 @@ import './providers/products_provider.dart';
 import './providers/cart_provider.dart';
 import './providers/order_provider.dart';
 
+// hacktoberfest-accepted
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
